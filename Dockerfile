@@ -7,5 +7,5 @@ RUN conda config --set channel_priority strict && \
     conda config --add channels conda-forge
 
 COPY ${envname}/${envname}.yml /tmp
-RUN mamba install -n base --file /tmp/${envname}.yml && \
+RUN mamba env update -n base --file /tmp/${envname}.yml && \
     mamba clean -afy
