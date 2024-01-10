@@ -1,11 +1,14 @@
 FROM quay.io/condaforge/miniforge3:23.3.1-1
 
-ARG envname
+ARG ENVNAME
 
 RUN conda config --set channel_priority strict && \
 conda config --add channels nodefaults && \
 conda config --add channels conda-forge
 
-COPY ${envname}/${envname}.yml /tmp
-RUN mamba env update -n base --file /tmp/${envname}.yml --prune && \
+COPY ${ENVNAME}/${ENVNAME}.yml /tmp
+RUN mamba env create -n ${ENVNAME} -f /tmp/${ENVNAME}.yml && \
 mamba clean -afy
+
+RUN sed 's/activate base$/activate ${ENVNAME}/' /etc/skel/.bashrc && \
+sed 's/activate base$/activate ${ENVNAME}/' ~/.bashrc
