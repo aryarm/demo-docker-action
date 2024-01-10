@@ -46,7 +46,7 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ${{ matrix.registry }}
-          username: ${{ (secrets[matrix.username_secret] != 'GHCR_USERNAME' && secrets[matrix.username_secret] || github.actor }}
+          username: ${{ (secrets[matrix.username_secret] != 'GHCR_USERNAME') && secrets[matrix.username_secret] || github.actor }}
           password: ${{ secrets[matrix.password_secret] }}
 
       - name: Set up Docker Buildx
