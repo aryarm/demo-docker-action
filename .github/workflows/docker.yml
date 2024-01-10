@@ -58,7 +58,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ matrix.registry }}/${{ env.IMAGE_NAME }}${{ matrix.envname }}
+          images: ${{ matrix.registry }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}${{ matrix.envname }}
 
       - name: prune
         run: docker system prune -af
