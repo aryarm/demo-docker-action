@@ -30,13 +30,13 @@ jobs:
           -
             name: github
             registry: ghcr.io
-            username_secret: ${{ github.actor }}
-            password_secret: ${{ github.token }}
+            username_secret: GHCR_USERNAME
+            password_secret: GITHUB_TOKEN
           -
             name: google
             registry: gcr.io
             username_secret: GCR_USERNAME
-            password_secret: GCR_JSON_KEY
+            password_secret: GCR_PASSWORD
 
     steps:
       - name: Checkout repository
@@ -46,7 +46,7 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ${{ matrix.registry }}
-          username: ${{ secrets[matrix.username_secret] }}
+          username: ${{ (secrets[matrix.username_secret] != 'GHCR_USERNAME' && secrets[matrix.username_secret] || github.actor }}
           password: ${{ secrets[matrix.password_secret] }}
 
       - name: Set up Docker Buildx
