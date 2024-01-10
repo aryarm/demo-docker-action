@@ -13,7 +13,9 @@ on:
       - 'README.md'
 
 env:
-  IMAGE_NAME: ${{ github.repository }}
+  # apply a unique prefix to all container images
+  # TODO: remove this in production
+  IMAGE_NAME: 'demo-'
 
 jobs:
   build-and-push:
@@ -56,7 +58,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ matrix.registry }}/${{ env.IMAGE_NAME }}-${{ matrix.envname }}
+          images: ${{ matrix.registry }}/${{ env.IMAGE_NAME }}${{ matrix.envname }}
 
       - name: prune
         run: docker system prune -af
@@ -66,7 +68,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: ${{ (hashFiles(format('{0}/Dockerfile', matrix.envname )) != '')  && format('{0}/Dockerfile', matrix.envname) || 'Dockerfile' }}
+          file: ${{ (hashFiles(format('{0}/Dockerfile', matrix.envname )) != '') && format('{0}/Dockerfile', matrix.envname) || 'Dockerfile' }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
