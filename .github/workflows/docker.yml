@@ -9,8 +9,6 @@ on:
       - 'README.md'
   pull_request:
     branches: [ "main" ]
-    # Publish semver tags as releases.
-    tags: [ 'v*.*.*' ]
     paths-ignore:
       - 'README.md'
 
@@ -18,12 +16,11 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build-and-push-images:
+  build-and-push:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-    needs: [metadata]
     strategy:
       matrix:
         registry: [ghcr.io, gcr.io]
@@ -33,7 +30,7 @@ jobs:
             name: GitHub Container Registry
             registry: ghcr.io
             username: ${{ github.actor }}
-            password: ${{ secrets.GITHUB_TOKEN }}
+            password: ${{ github.token }}
           -
             name: Google Container Registry
             registry: gcr.io
@@ -59,7 +56,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ${{ matrix.registry }}/${{ env.IMAGE_NAME }}-${{ matrix.envname }}
-      
+
       - name: prune
         run: docker system prune -af
 
@@ -68,7 +65,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: ${{ (hashFiles(format('{0}/Dockerfile', matrix.envname )) != '')  && format('{0}/Dockerfile', matrix.envname) || Dockerfile }}
+          file: ${{ (hashFiles(format('{0}/Dockerfile', matrix.envname )) != '')  && format('{0}/Dockerfile', matrix.envname) || 'Dockerfile' }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
