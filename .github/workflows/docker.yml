@@ -23,6 +23,7 @@ jobs:
       packages: write
     strategy:
       matrix:
+        name: [github, google]
         envname: [haptools, trtools]
         include:
           -
