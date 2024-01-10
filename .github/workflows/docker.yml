@@ -17,6 +17,7 @@ on:
 env:
   IMAGE_NAME: ${{ github.repository }}
 
+jobs:
   build-and-push-images:
     runs-on: ubuntu-latest
     permissions:
