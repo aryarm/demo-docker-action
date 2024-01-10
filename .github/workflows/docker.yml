@@ -23,19 +23,18 @@ jobs:
       packages: write
     strategy:
       matrix:
-        registry: [ghcr.io, gcr.io]
         envname: [haptools, trtools]
         include:
           -
-            name: GitHub Container Registry
+            name: github
             registry: ghcr.io
-            username: ${{ github.actor }}
-            password: ${{ github.token }}
+            username_secret: ${{ github.actor }}
+            password_secret: ${{ github.token }}
           -
-            name: Google Container Registry
+            name: google
             registry: gcr.io
-            username: GCR_USERNAME
-            password: GCR_JSON_KEY
+            username_secret: GCR_USERNAME
+            password_secret: GCR_JSON_KEY
 
     steps:
       - name: Checkout repository
@@ -45,8 +44,8 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ${{ matrix.registry }}
-          username: ${{ matrix.username }}
-          password: ${{ matrix.password }}
+          username_secret: ${{ secrets[matrix.username_secret] }}
+          password_secret: ${{ secrets[matrix.password_secret] }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
