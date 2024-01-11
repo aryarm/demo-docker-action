@@ -16,15 +16,13 @@ conda config --add channels conda-forge
 COPY ${ENVNAME}/environment.yml /tmp
 
 RUN mamba create -n lock 'conda-forge::conda-lock==2.5.1' && \
-conda activate lock && \
-conda-lock lock \
+conda run -n lock conda-lock lock \
     --platform linux-64 \
     --file /tmp/environment.yml \
     --kind lock \
     --lockfile /tmp/conda-lock.yml
 
-RUN conda activate lock && \
-conda-lock install \
+RUN conda run -n lock conda-lock install \
     --mamba \
     --copy \
     --prefix /opt/env \
