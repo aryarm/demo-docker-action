@@ -6,9 +6,6 @@ RUN conda config --set channel_priority strict && \
 conda config --add channels nodefaults && \
 conda config --add channels conda-forge
 
-COPY ${ENVNAME}/${ENVNAME}.yml /tmp
-RUN mamba env create -n ${ENVNAME} -f /tmp/${ENVNAME}.yml && \
+COPY ${ENVNAME}/environment.yml /tmp
+RUN mamba env update -n base -f /tmp/environment.yml && \
 mamba clean -afy
-
-RUN sed -i 's/activate base$/activate ${ENVNAME}/' /etc/skel/.bashrc && \
-sed -i 's/activate base$/activate ${ENVNAME}/' ~/.bashrc
