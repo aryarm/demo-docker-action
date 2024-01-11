@@ -4,7 +4,7 @@ A demonstration of using GitHub actions to build and push reproducible Docker co
 ## configuration
 First, fork this repository.
 
-Now, add your Google Container registry username and password as repository secrets under the settings menu. To get there, click on [_Settings_ > _Secrets and variables_ > _Actions_](settings/secrets/actions#repository-secrets). Then create secrets for
+Now, add your Google Container registry username and password as repository secrets under the settings menu. To get there, click on [_Settings_ > _Secrets and variables_ > _Actions_](../../settings/secrets/actions#repository-secrets). Then create secrets for
 
 1. GCR_USERNAME
 2. GCR_PASSWORD

@@ -20,6 +20,7 @@ env:
 jobs:
   # adapted from https://docs.github.com/en/actions/learn-github-actions/expressions#example-returning-a-json-object
   get_dirs:
+    name: Get directory names
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.output-dirs.outputs.matrix }} # contains a list of the module names encoded as a json array
