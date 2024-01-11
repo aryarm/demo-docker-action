@@ -1,4 +1,10 @@
-FROM quay.io/condaforge/miniforge3:23.3.1-1
+# Note: This Dockerfile is adapted from adapted from
+# https://conda.github.io/conda-lock/docker#conda-lock-inside-a-build-container
+
+# -----------------
+# Builder container
+# -----------------
+FROM quay.io/condaforge/miniforge3:23.3.1-1 as builder
 
 ARG ENVNAME
 
@@ -6,13 +12,29 @@ RUN conda config --set channel_priority strict && \
 conda config --add channels nodefaults && \
 conda config --add channels conda-forge
 
-# ensure separate environment (rather than base environment) is activated upon startup
-# this takes advantage of the fact that "conda activate" was added to our .bashrc files in the base image:
-# https://github.com/conda-forge/miniforge-images/blob/384bc8e6b047472d9b5ba0054f28e309d3c713e0/ubuntu/Dockerfile#L37-L38
-RUN sed -i 's/activate base$/activate '"${ENVNAME}"'/' /etc/skel/.bashrc && \
-sed -i 's/activate base$/activate '"${ENVNAME}"'/' ~/.bashrc
-
 # do not install in base environment but in separate environment!
 COPY ${ENVNAME}/environment.yml /tmp
-RUN mamba env create -n ${ENVNAME} -f /tmp/environment.yml && \
-mamba clean -afy
+
+RUN mamba create -n lock 'conda-forge::conda-lock==2.5.1' && \
+conda activate lock && \
+conda-lock lock \
+    --platform linux-64 \
+    --file /tmp/environment.yml \
+    --kind lock \
+    --lockfile /tmp/conda-lock.yml
+
+RUN conda activate lock && \
+conda-lock install \
+    --mamba \
+    --copy \
+    --prefix /opt/env \
+    /tmp/conda-lock.yml
+
+# TODO: try conda-pack? as described in https://pythonspeed.com/articles/conda-docker-image-size/
+
+# -----------------
+# Primary container
+# -----------------
+FROM gcr.io/distroless/base-debian10
+COPY --from=builder /opt/env /opt/env
+ENV PATH="/opt/env/bin:${PATH}"
