@@ -30,7 +30,7 @@ jobs:
 
       - name: get directory names
         id: output-dirs
-        # adapted from https://stackoverflow.com/a/74829694
+        # adapted from https://stackoverflow.com/a/71687652
         run: |
           matrix=$(ls -d */ | jq --raw-input --slurp --compact-output 'split("/\n")[:-1]')
           echo "$matrix"
@@ -45,7 +45,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        name: [github]
+        name: [github] # list the names of additional container registries here
         # retrieve the environment names dynamically instead of listing them out manually like this:
         # envname: [haptools, trtools]
         envname: ${{ fromJson(needs.get_dirs.outputs.matrix) }}
@@ -55,6 +55,8 @@ jobs:
             registry: ghcr.io
             username: ${{ github.actor }}
             password: GITHUB_TOKEN
+          # you can list other container registries here, as well
+          # https://github.com/docker/login-action?tab=readme-ov-file#google-artifact-registry-gar
 
     steps:
       - name: Checkout repository
