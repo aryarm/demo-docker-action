@@ -45,7 +45,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        name: [github, google]
+        name: [github]
         envname: ${{ fromJson(needs.get_dirs.outputs.matrix) }}
         include:
           -
