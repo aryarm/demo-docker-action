@@ -18,7 +18,24 @@ env:
   IMAGE_NAME: 'demo-'
 
 jobs:
+  # adapted from https://docs.github.com/en/actions/learn-github-actions/expressions#example-returning-a-json-object
+  get_dirs:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.output-dirs.outputs.matrix }} # contains a list of the module names encoded as a json array
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: get directory names
+        id: output-dirs
+        # adapted from https://stackoverflow.com/a/74829694
+        run: |
+          matrix=$(ls -d */ | jq --raw-input --slurp --compact-output 'split("/\n")[:-1]')
+          echo "matrix=$matrix" >> $GITHUB_OUTPUT
+
   build-and-push:
+    needs: get_dirs
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -27,7 +44,7 @@ jobs:
       fail-fast: false
       matrix:
         name: [github, google]
-        envname: [haptools, trtools]
+        envname: ${{ fromJson(needs.get_dirs.outputs.matrix) }}
         include:
           -
             name: github
