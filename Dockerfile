@@ -10,5 +10,6 @@ COPY ${ENVNAME}/environment.yml /tmp
 RUN mamba env create -n ${ENVNAME} -f /tmp/environment.yml && \
 mamba clean -afy
 
-RUN sed -i 's/activate base$/activate ${ENVNAME}/' /etc/skel/.bashrc && \
-sed -i 's/activate base$/activate ${ENVNAME}/' ~/.bashrc
+# ensure environment is activated upon startup
+RUN sed -i 's/activate base$/activate '"${ENVNAME}"'/' /etc/skel/.bashrc && \
+sed -i 's/activate base$/activate '"${ENVNAME}"'/' ~/.bashrc
