@@ -33,6 +33,7 @@ jobs:
         # adapted from https://stackoverflow.com/a/74829694
         run: |
           matrix=$(ls -d */ | jq --raw-input --slurp --compact-output 'split("/\n")[:-1]')
+          echo "$matrix"
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
   build-and-push:
