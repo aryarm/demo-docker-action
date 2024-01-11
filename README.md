@@ -1,6 +1,8 @@
 # demo-docker-action
 A demonstration of using GitHub actions to build and push reproducible Docker containers with best practices
 
+The build-and-push GitHub action is triggered whenever a push is made to `main` or to a PR that will be merged into `main`.
+
 ## adding your own container
 Each directory in this repository corresponds with a different Docker image. To add a new image, start by creating a new directory. Our GitHub actions workflow will automatically notice it and try to build an image for it.
 
@@ -8,3 +10,16 @@ Inside of the directory, [create a conda environment.yml file](https://conda.io/
 ![reproducible_conda_envs](https://github.com/aryarm/demo-docker-action/assets/23412689/791efa84-53dd-4fca-8ea8-8c7029c0528b)
 
 If a Dockerfile exists in the directory, it will be used to create the image. Otherwise, the GitHub action will use the default Dockerfile provided in the root of this repository.
+
+## pushing to other container registries
+This GitHub action is currently configured to push to the GitHub container registry, but you can easily add other container registries, like DockerHub or Google Container Registry.
+
+Just add your registry in [the *"include" section* of the GitHub action workflow](https://github.com/aryarm/demo-docker-action/blob/23d9cb7beecf92ca691e59ac588b4b2b975ce317/.github/workflows/docker.yml#L58-L59). For each registry, you will need to provide:
+1. A short nickname (ex: "google" if using the Google Container Registry)
+2. The registry domain (ex: "gcr.io" if using the Google Container Registry)
+3. A login username
+4. A login password or key
+
+For a list of the supported registries and directions on how to obtain usernames and passwords, refer to [the `docker/login-action` README](https://github.com/docker/login-action?tab=readme-ov-file#about).
+
+**Important**: Since item 4 is usually sensitive, it should be added as a _GitHub secret_ under the settings menu for this repository. To get there, click on [_Settings_ > _Secrets and variables_ > _Actions_](../../settings/secrets/actions#repository-secrets). Give your secret a memorable name. Provide that name in place of the secret itself within the GitHub action workflow.

@@ -56,7 +56,7 @@ jobs:
             username: ${{ github.actor }}
             password: GITHUB_TOKEN
           # you can list other container registries here, as well
-          # https://github.com/docker/login-action?tab=readme-ov-file#google-artifact-registry-gar
+          # https://github.com/docker/login-action?tab=readme-ov-file#about
 
     steps:
       - name: Checkout repository
