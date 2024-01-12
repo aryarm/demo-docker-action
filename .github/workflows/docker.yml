@@ -12,11 +12,6 @@ on:
     paths-ignore:
       - 'README.md'
 
-env:
-  # apply a unique prefix to all container images
-  # TODO: change this to the empty string ('') in production
-  IMAGE_NAME: 'demo-'
-
 jobs:
   # adapted from https://docs.github.com/en/actions/learn-github-actions/expressions#example-returning-a-json-object
   get_dirs:
@@ -76,7 +71,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ matrix.registry }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}${{ matrix.envname }}
+          images: ${{ matrix.registry }}/${{ github.repository_owner }}/${{ matrix.envname }}
 
       - name: prune
         run: docker system prune -af
