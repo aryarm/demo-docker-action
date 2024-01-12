@@ -20,7 +20,7 @@ You can [install `conda-lock` with conda]([text](https://anaconda.org/conda-forg
 ## pushing to other container registries
 This GitHub action is currently configured to push to the GitHub container registry, but you can easily add other container registries, like DockerHub or Google Container Registry.
 
-Just add your registry in [the *"include" section* of the GitHub action workflow](https://github.com/aryarm/demo-docker-action/blob/23d9cb7beecf92ca691e59ac588b4b2b975ce317/.github/workflows/docker.yml#L58-L59). For each registry, you will need to provide:
+Just add your registry in [the *"include" section* of the GitHub action workflow](https://github.com/aryarm/demo-docker-action/blob/2850ce9b/.github/workflows/docker.yml#L53-L54). For each registry, you will need to provide:
 1. A short nickname (ex: "google" if using the Google Container Registry)
 2. The registry domain (ex: "gcr.io" if using the Google Container Registry)
 3. A login username
