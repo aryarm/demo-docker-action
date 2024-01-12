@@ -1,5 +1,5 @@
 # Note: This Dockerfile is adapted from adapted from
-# https://conda.github.io/conda-lock/docker#conda-lock-inside-a-build-container
+# https://conda.github.io/conda-lock/docker#docker
 
 # -----------------
 # Builder container
@@ -12,21 +12,8 @@ RUN conda config --set channel_priority strict && \
 conda config --add channels nodefaults && \
 conda config --add channels conda-forge
 
-# do not install in base environment but in separate environment!
-COPY ${ENVNAME}/environment.yml /tmp
-
-RUN mamba create -n lock 'conda-forge::conda-lock==2.5.1' && \
-conda run -n lock conda-lock lock \
-    --platform linux-64 \
-    --file /tmp/environment.yml \
-    --kind lock \
-    --lockfile /tmp/conda-lock.yml
-
-RUN conda run -n lock conda-lock install \
-    --mamba \
-    --copy \
-    --prefix /opt/env \
-    /tmp/conda-lock.yml
+COPY ${ENVNAME}/conda-linux-64.lock /tmp
+RUN conda create -p /opt/env --copy --file /tmp/conda-linux-64.lock
 
 # TODO: try conda-pack? as described in https://pythonspeed.com/articles/conda-docker-image-size/
 

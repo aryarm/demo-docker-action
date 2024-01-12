@@ -4,12 +4,18 @@ A demonstration of using GitHub actions to build and push reproducible Docker co
 The build-and-push GitHub action is triggered whenever a push is made to `main` or to a PR that will be merged into `main`.
 
 ## adding your own container
-Each directory in this repository corresponds with a different Docker image. To add a new image, start by creating a new directory. Our GitHub actions workflow will automatically notice it and try to build an image for it.
-
-Inside of the directory, [create a conda environment.yml file](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#create-env-file-manually) containing all of the required packages. Make sure to follow best practices when writing your conda environment.yml file.
-![reproducible_conda_envs](https://github.com/aryarm/demo-docker-action/assets/23412689/791efa84-53dd-4fca-8ea8-8c7029c0528b)
+Each directory in this repository corresponds with a different Docker image. So you should start by creating a new directory.
 
 If a Dockerfile exists in the directory, it will be used to create the image. Otherwise, the GitHub action will use the default Dockerfile provided in the root of this repository.
+
+For the most reproducible builds, try to install all of your software with conda. You should provide [a conda `environment.yml` file](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#create-env-file-manually) containing all of your required packages. Make sure to follow best practices when writing your conda environment file.
+![reproducible_conda_envs](https://github.com/aryarm/demo-docker-action/assets/23412689/791efa84-53dd-4fca-8ea8-8c7029c0528b)
+
+Alongside your `environment.yml` file, you should provide a `conda-linux-64.lock` file. To create it, you can run the following inside the directory:
+```
+conda-lock --kind explicit --platform linux-64 --file environment.yml --check-input-hash
+```
+You can [install `conda-lock` with conda]([text](https://anaconda.org/conda-forge/conda-lock)).
 
 ## pushing to other container registries
 This GitHub action is currently configured to push to the GitHub container registry, but you can easily add other container registries, like DockerHub or Google Container Registry.
