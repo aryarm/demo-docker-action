@@ -76,9 +76,27 @@ jobs:
       - name: prune
         run: docker system prune -af
 
-      - name: Build and push Docker image
-        id: builder
-        uses: docker/build-push-action@v3
+      - name: Build and export to Docker
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          load: true
+          file: ${{ (hashFiles(format('{0}/Dockerfile', matrix.envname )) != '') && format('{0}/Dockerfile', matrix.envname) || 'Dockerfile' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            "ENVNAME=${{ matrix.envname }}"
+      
+      - name: Test before push
+        # only run tests if a test.bash file exists in the directory
+        if: ${{ hashFiles(format('{0}/test.bash', matrix.envname )) != '' }}
+        run: |
+          docker run --rm -i ${{ steps.meta.outputs.tags }} /bin/bash < ${{ matrix.envname }}/test.bash
+
+      - name: Push to Docker
+        uses: docker/build-push-action@v5
         with:
           context: .
           file: ${{ (hashFiles(format('{0}/Dockerfile', matrix.envname )) != '') && format('{0}/Dockerfile', matrix.envname) || 'Dockerfile' }}
