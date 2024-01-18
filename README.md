@@ -8,10 +8,10 @@ Each directory in this repository corresponds with a different Docker image. So 
 
 If a Dockerfile exists in the directory, it will be used to create the image. Otherwise, the GitHub action will use the default Dockerfile provided in the root of this repository.
 
-For the most reproducible builds, try to install all of your software with conda. You should provide [a conda `environment.yml` file](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#create-env-file-manually) containing all of your required packages. Make sure to follow best practices when writing your conda environment file.
+Try to install all of your software with conda. You can provide [a conda `environment.yml` file](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#create-env-file-manually) containing all of your required packages. Make sure to follow best practices when writing your conda environment file.
 ![reproducible_conda_envs](https://github.com/aryarm/demo-docker-action/assets/23412689/791efa84-53dd-4fca-8ea8-8c7029c0528b)
 
-Alongside your `environment.yml` file, you should provide a `conda-linux-64.lock` file. To create it, you can run the following inside the directory:
+Alongside your `environment.yml` file, you must provide a `conda-linux-64.lock` file. This maximizes the reproducibility of your builds. To create it, you can run the following inside the directory:
 ```
 conda-lock --kind explicit --platform linux-64 --file environment.yml --check-input-hash
 ```
@@ -20,7 +20,7 @@ You can [install `conda-lock` with conda](https://anaconda.org/conda-forge/conda
 conda create -y -n lock -c conda-forge conda-lock
 ```
 
-Optionally, you can provide a `test.bash` script that will be used to test the image before it's pushed. The script will be executed from its directory.
+Optionally, you can provide a `test.sh` script that will be used to test the image before it's pushed. The script will be executed from its directory. Remember to mark it as executable via `chmod u+x test.sh`.
 
 ## pushing to other container registries
 This GitHub action is currently configured to push to the GitHub container registry, but you can easily add other container registries, like DockerHub or Google Container Registry.
