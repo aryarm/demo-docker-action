@@ -1,5 +1,5 @@
 # demo-docker-action
-A demonstration of using GitHub actions to build and push reproducible Docker containers with best practices
+A demonstration of using GitHub actions to build and push reproducible, conda-based Docker containers with best practices
 
 The build-and-push GitHub action is triggered whenever a push is made to `main` or to a PR that will be merged into `main`.
 
