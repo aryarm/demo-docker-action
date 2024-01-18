@@ -15,7 +15,12 @@ Alongside your `environment.yml` file, you should provide a `conda-linux-64.lock
 ```
 conda-lock --kind explicit --platform linux-64 --file environment.yml --check-input-hash
 ```
-You can [install `conda-lock` with conda]([text](https://anaconda.org/conda-forge/conda-lock)).
+You can [install `conda-lock` with conda](https://anaconda.org/conda-forge/conda-lock):
+```
+conda create -y -n lock -c conda-forge conda-lock
+```
+
+Optionally, you can provide a `test.bash` script that will be used to test the image before it's pushed. The script will be executed from its directory.
 
 ## pushing to other container registries
 This GitHub action is currently configured to push to the GitHub container registry, but you can easily add other container registries, like DockerHub or Google Container Registry.
