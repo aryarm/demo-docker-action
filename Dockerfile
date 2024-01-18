@@ -20,6 +20,6 @@ RUN conda create -p /opt/env --copy --file /tmp/conda-linux-64.lock
 # -----------------
 # Primary container
 # -----------------
-FROM bash:5.2.26
+FROM gcr.io/distroless/base-debian12:debug
 COPY --from=builder /opt/env /opt/env
 ENV PATH="/opt/env/bin:${PATH}"
