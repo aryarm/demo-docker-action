@@ -80,7 +80,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          load: true
+          load: true # copied from https://docs.docker.com/build/ci/github-actions/test-before-push
           file: ${{ (hashFiles(format('{0}/Dockerfile', matrix.envname )) != '') && format('{0}/Dockerfile', matrix.envname) || 'Dockerfile' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -90,9 +90,11 @@ jobs:
             "ENVNAME=${{ matrix.envname }}"
       
       - name: Test before push
-        # only run tests if a test.sh file exists in the directory
-        if: ${{ hashFiles(format('{0}/test.sh', matrix.envname )) != '' }}
+        if: ${{ hashFiles(format('{0}/test.sh', matrix.envname )) != '' }} # only if a test.sh file exists
         run: |
+          # This command was adapted from
+          # https://docs.docker.com/engine/reference/commandline/run#volume and
+          # https://github.com/broadinstitute/cromwell/blob/ec1f3ac0/cromwell.example.backends/Docker.conf#L25
           docker run --rm -v ./${{ matrix.envname }}:/${{ matrix.envname }} -w /${{ matrix.envname }} -i ${{ steps.meta.outputs.tags }} ./test.sh
 
       - name: Push to Docker
