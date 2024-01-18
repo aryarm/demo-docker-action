@@ -15,7 +15,9 @@ Alongside your `environment.yml` file, you must provide a `conda-linux-64.lock` 
 ```
 conda-lock --kind explicit --platform linux-64 --file environment.yml --check-input-hash
 ```
-You can [install `conda-lock` with conda](https://anaconda.org/conda-forge/conda-lock):
+If you ever add or modify a package in your `environment.yml` file, you should update its version in the `conda-linux-64.lock` file:
+<pre><code>conda-lock --kind explicit --platform linux-64 --file environment.yml --check-input-hash <b>--update PACKAGENAME</b></code></pre>
+If you don't already have it, you can [install `conda-lock` with conda](https://anaconda.org/conda-forge/conda-lock):
 ```
 conda create -y -n lock -c conda-forge conda-lock
 ```
