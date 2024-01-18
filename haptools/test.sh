@@ -2,5 +2,3 @@
 
 haptools --help
 python -c "import haptools"
-
-ls hi.txt
