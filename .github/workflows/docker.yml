@@ -90,10 +90,10 @@ jobs:
             "ENVNAME=${{ matrix.envname }}"
       
       - name: Test before push
-        # only run tests if a test.bash file exists in the directory
-        if: ${{ hashFiles(format('{0}/test.bash', matrix.envname )) != '' }}
+        # only run tests if a test.sh file exists in the directory
+        if: ${{ hashFiles(format('{0}/test.sh', matrix.envname )) != '' }}
         run: |
-          docker run --rm -v ./${{ matrix.envname }}:/${{ matrix.envname }} -w /${{ matrix.envname }} -i ${{ steps.meta.outputs.tags }} bash test.bash
+          docker run --rm -v ./${{ matrix.envname }}:/${{ matrix.envname }} -w /${{ matrix.envname }} -i ${{ steps.meta.outputs.tags }} sh test.sh
 
       - name: Push to Docker
         uses: docker/build-push-action@v5
