@@ -20,6 +20,6 @@ RUN conda create -p /opt/env --copy --file /tmp/conda-linux-64.lock
 # -----------------
 # Primary container
 # -----------------
-FROM ubuntu:22.04
+FROM bash:5.2.26
 COPY --from=builder /opt/env /opt/env
 ENV PATH="/opt/env/bin:${PATH}"
