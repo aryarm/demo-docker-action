@@ -1,6 +1,4 @@
-#!/usr/bin/env bash
-
-set -euo pipefail
+#!/usr/bin/env sh
 
 haptools --help
 python -c "import haptools"

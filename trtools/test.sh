@@ -1,6 +1,4 @@
-#!/usr/bin/env bash
-
-set -euo pipefail
+#!/usr/bin/env sh
 
 associaTR --help
 dumpSTR --help
