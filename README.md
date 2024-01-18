@@ -13,10 +13,10 @@ Try to install all of your software with conda. You can provide [a conda `enviro
 
 Alongside your `environment.yml` file, you must provide a `conda-linux-64.lock` file. This maximizes the reproducibility of your builds. To create it, you can run the following inside the directory:
 ```
-conda-lock --kind explicit --platform linux-64 --file environment.yml --check-input-hash
+conda-lock --kind explicit --platform linux-64 --file environment.yml
 ```
 If you ever add or modify a package in your `environment.yml` file, you should update its version in the `conda-linux-64.lock` file:
-<pre><code>conda-lock --kind explicit --platform linux-64 --file environment.yml --check-input-hash <b>--update PACKAGENAME</b></code></pre>
+<pre><code>conda-lock --kind explicit --platform linux-64 --file environment.yml <b>--update PACKAGENAME</b></code></pre>
 If you don't already have it, you can [install `conda-lock` with conda](https://anaconda.org/conda-forge/conda-lock):
 ```
 conda create -y -n lock -c conda-forge conda-lock
