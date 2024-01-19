@@ -92,10 +92,10 @@ jobs:
       
       - name: Test before push
         if: ${{ hashFiles(format('{0}/test.sh', matrix.envname )) != '' }} # only if a test.sh file exists
+        # This command was adapted from
+        # https://docs.docker.com/engine/reference/commandline/run#volume and
+        # https://github.com/broadinstitute/cromwell/blob/ec1f3ac0/cromwell.example.backends/Docker.conf#L25
         run: |
-          # This command was adapted from
-          # https://docs.docker.com/engine/reference/commandline/run#volume and
-          # https://github.com/broadinstitute/cromwell/blob/ec1f3ac0/cromwell.example.backends/Docker.conf#L25
           docker run --rm -v ./${{ matrix.envname }}:/${{ matrix.envname }} -w /${{ matrix.envname }} -i ${{ steps.meta.outputs.tags }} ./test.sh
 
       - name: Push to Docker
