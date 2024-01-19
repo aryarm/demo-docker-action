@@ -78,6 +78,7 @@ jobs:
 
       - name: Build and export to Docker
         uses: docker/build-push-action@v5
+        if: ${{ hashFiles(format('{0}/test.sh', matrix.envname )) != '' }} # only if a test.sh file exists
         with:
           context: .
           load: true # copied from https://docs.docker.com/build/ci/github-actions/test-before-push
