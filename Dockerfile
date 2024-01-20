@@ -33,4 +33,4 @@ RUN /venv/bin/conda-unpack
 FROM gcr.io/distroless/base-debian12:debug
 COPY --from=builder /venv /venv
 SHELL ["/busybox/sh", "-c"]
-ENV PATH="/opt/env/bin:${PATH}"
+ENV PATH="/venv/bin:${PATH}"
