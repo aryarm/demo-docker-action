@@ -33,5 +33,5 @@ RUN /venv/bin/conda-unpack
 FROM gcr.io/distroless/base-debian12:debug
 COPY --from=builder /venv /venv
 SHELL ["/busybox/sh", "-c"]
-RUN "echo hello"
+RUN echo hello
 ENTRYPOINT . /venv/bin/activate
