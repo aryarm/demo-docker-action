@@ -32,4 +32,6 @@ RUN /venv/bin/conda-unpack
 # We use 'debug' on distroless so that we can execute test.sh scripts (see https://stackoverflow.com/a/71724405)
 FROM gcr.io/distroless/base-debian12:debug
 COPY --from=builder /venv /venv
-ENTRYPOINT [".", "/venv/bin/activate"]
+SHELL ["/busybox/sh", "-c"]
+RUN "echo hello"
+ENTRYPOINT . /venv/bin/activate
