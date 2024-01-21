@@ -12,7 +12,7 @@ RUN conda config --set channel_priority strict && \
 conda config --add channels nodefaults && \
 conda config --add channels conda-forge
 
-RUN conda install -c conda-forge conda-pack
+RUN conda install -c conda-forge 'conda-pack==0.7.1'
 
 COPY ${ENVNAME}/conda-linux-64.lock /tmp
 RUN conda create -p /opt/env --copy --file /tmp/conda-linux-64.lock
@@ -33,4 +33,6 @@ RUN /venv/bin/conda-unpack
 FROM gcr.io/distroless/base-debian12:debug
 COPY --from=builder /venv /venv
 SHELL ["/busybox/sh", "-c"]
-ENV PATH="/venv/bin:${PATH}"
+# modify activate script to support busybox shell (see https://github.com/conda/conda-pack/issues/170)
+RUN sed -i '16i \ \ \ \ \ \ \ \ elif [ "$(basename $(readlink /proc/$$/exe))" = "busybox" ]; then _CONDA_SHELL_FLAVOR=ash' /venv/bin/activate
+ENTRYPOINT . /venv/bin/activate
