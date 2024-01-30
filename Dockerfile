@@ -34,3 +34,4 @@ FROM ubuntu:22.04
 COPY --from=builder /venv /venv
 # modify activate script to support busybox shell (see https://github.com/conda/conda-pack/issues/170)
 # RUN sed -i '16i \ \ \ \ \ \ \ \ elif [ "$(basename $(readlink /proc/$$/exe))" = "busybox" ]; then _CONDA_SHELL_FLAVOR=ash' /venv/bin/activate
+# RUD sed -i '14s\;\ || [ "$(basename $(readlink /proc/$$/exe)" = "dash" ];\' /venv/bin/activate
