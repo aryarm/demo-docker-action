@@ -1,0 +1,14 @@
+FROM continuumio/miniconda3:23.10.0-1
+
+ARG ENVNAME
+
+RUN conda config --set channel_priority strict && \
+conda config --add channels nodefaults && \
+conda config --add channels conda-forge
+
+RUN conda create -p /opt/samtools -c conda-forge -c bioconda 'samtools==1.13'
+
+COPY ${ENVNAME}/conda-linux-64.lock /tmp
+RUN conda create -p /opt/env --copy --file /tmp/conda-linux-64.lock
+
+ENV PATH="/opt/env/bin:${PATH}"
