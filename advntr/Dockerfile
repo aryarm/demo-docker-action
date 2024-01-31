@@ -12,9 +12,7 @@ conda config --add channels conda-forge
 
 RUN conda create -p /opt/samtools -c conda-forge -c bioconda 'samtools==1.13'
 
-ARG ENVNAME
-
-COPY ${ENVNAME}/conda-linux-64.lock /tmp
+COPY advntr/conda-linux-64.lock /tmp
 RUN conda create -p /opt/env --copy --file /tmp/conda-linux-64.lock
 
 # -----------------
