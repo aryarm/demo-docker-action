@@ -38,7 +38,7 @@ For a list of the supported registries and directions on how to obtain usernames
 **Important**: Since item 4 is usually sensitive, it should be added as a _GitHub secret_ under the settings menu for this repository. To get there, click on [_Settings_ > _Secrets and variables_ > _Actions_](../../settings/secrets/actions#repository-secrets). Give your secret a memorable name. Provide that name in place of the secret itself within the GitHub action workflow.
 
 ## some best practices that this template encourages
-1. Locks all of your software to specific versions, and uses conda and conda-lock to also lock the dependencies of that software.
-2. Uses a small base image and [multi-stage builds](https://pythonspeed.com/articles/smaller-python-docker-images/) to ensure only the required software is packaged.
-3. Uses [Docker layer caching](https://pythonspeed.com/articles/faster-multi-stage-builds) to ensure images are built quickly. The default Dockerfile is designed to [reduce cache busting](https://pythonspeed.com/articles/docker-caching-model/).
-4. Uses GitHub actions to automatically test images before deploying them. Uses GitHub secrets to securely manage permissions to push to shared container repositories.
+1. **Reproducibility** Locks all of your software to specific versions, and uses conda and conda-lock to also lock the dependencies of that software.
+2. **Size** Uses a small base image and [multi-stage builds](https://pythonspeed.com/articles/smaller-python-docker-images/) to ensure only the required software is packaged.
+3. **Speed** Uses [Docker layer caching](https://pythonspeed.com/articles/faster-multi-stage-builds) to ensure images are built quickly. The default Dockerfile is designed to [reduce cache busting](https://pythonspeed.com/articles/docker-caching-model/).
+4. **Testing and Security** Uses GitHub actions to automatically test images before deploying them. Uses GitHub secrets to securely manage permissions to push to shared container repositories.
