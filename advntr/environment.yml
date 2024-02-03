@@ -1,0 +1,6 @@
+channels:
+  - conda-forge
+  - bioconda
+  - defaults # we must include this -- otherwise, only advntr <= 1.2.0 can be installed
+dependencies:
+  - bioconda::advntr==1.5.0
