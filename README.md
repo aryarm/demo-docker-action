@@ -1,7 +1,7 @@
 # demo-docker-action
 A demonstration of using GitHub actions to build and push reproducible, conda-based Docker containers with best practices
 
-The build-and-push GitHub action is triggered whenever a push is made to `main` or to a PR that will be merged into `main`. Images from PRs are tagged by their PR number.
+The build-and-push GitHub action is triggered whenever a push is made to `main` or to a PR that will be merged into `main`. Images from PRs are tagged by their PR number. Only environments which have been changed will be pushed.
 
 ## adding your own container
 Each directory in this repository corresponds with a different Docker image. So you should start by creating a new directory.
