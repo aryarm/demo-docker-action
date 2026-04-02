@@ -80,6 +80,7 @@ jobs:
 
       - name: Build and export to Docker
         uses: docker/build-push-action@v7
+        id: build
         if: ${{ hashFiles(format('{0}/test.sh', matrix.envname )) != '' }} # only if a test.sh file exists
         with:
           context: .
@@ -101,7 +102,7 @@ jobs:
           docker run --rm -v ./${{ matrix.envname }}:/${{ matrix.envname }} -w /${{ matrix.envname }} -i ${{ steps.meta.outputs.tags }} ./test.sh
 
       - name: Push to Docker
-        id: builder
+        id: push
         uses: docker/build-push-action@v7
         with:
           context: .
@@ -118,5 +119,5 @@ jobs:
         uses: actions/attest@v4
         with:
           subject-name: ${{ matrix.registry }}/${{ github.repository_owner }}/${{ matrix.envname }}
-          subject-digest: ${{ steps.builder.outputs.digest }}
+          subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
