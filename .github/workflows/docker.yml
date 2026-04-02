@@ -27,7 +27,7 @@ jobs:
         id: output-dirs
         # adapted from https://stackoverflow.com/a/71687652
         run: |
-          matrix=$(ls -d */ | jq --raw-input --slurp --compact-output 'split("/\n")[:-1]')
+          matrix=$(ls */conda-linux-64.lock | sed 's+/conda-linux-64.lock++' | jq --raw-input --slurp --compact-output 'split("\n")[:-1]')
           echo "$matrix"
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
