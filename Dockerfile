@@ -4,7 +4,7 @@
 # -----------------
 # Builder container
 # -----------------
-FROM quay.io/condaforge/miniforge3:23.3.1-1 as builder
+FROM quay.io/condaforge/miniforge3:23.3.1-1 AS builder
 
 ARG ENVNAME
 
