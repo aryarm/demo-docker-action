@@ -15,19 +15,32 @@ on:
 jobs:
   # adapted from https://docs.github.com/en/actions/learn-github-actions/expressions#example-returning-a-json-object
   get_dirs:
-    name: Get directory names
+    name: List changed images
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    strategy:
+      fail-fast: true
     outputs:
-      matrix: ${{ steps.output-dirs.outputs.matrix }} # contains a list of the module names encoded as a json array
+      matrix: ${{ steps.output-dirs.outputs.matrix }} # contains a list of the image names encoded as a json array
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
+      - name: List changed packages
+        id: filter
+        uses: dorny/paths-filter@v4
+        with:
+          list-files: shell
+          filters: |
+            changed:
+              - added|modified: '**/conda-linux-64.lock'
 
       - name: get directory names
         id: output-dirs
         # adapted from https://stackoverflow.com/a/71687652
         run: |
-          matrix=$(ls */conda-linux-64.lock | sed 's+/conda-linux-64.lock++' | jq --raw-input --slurp --compact-output 'split("\n")[:-1]')
+          matrix=$(for i in ${{ steps.filter.outputs.changed_files }}; do sed 's+/conda-linux-64.lock++' <<< $i; done | jq --raw-input --slurp --compact-output 'split("\n")[:-1]')
           echo "$matrix"
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
