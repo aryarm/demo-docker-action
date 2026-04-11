@@ -133,12 +133,12 @@ jobs:
           push-to-registry: true
 
   all-green:
-    name: Gather all checks
+    name: All checks
     needs: [get_dirs, build-and-push]
     if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
-      - name: Fail if any image job failed
+      - name: Fail if any image could not be built
         run: |
           echo "build-and-push result: ${{ needs.build-and-push.result }}"
 

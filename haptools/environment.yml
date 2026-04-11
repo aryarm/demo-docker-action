@@ -3,4 +3,4 @@ channels:
   - bioconda
   - nodefaults
 dependencies:
-  - bioconda::haptools==0.3.0
+  - bioconda::haptools==0.5.0
