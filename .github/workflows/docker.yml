@@ -140,8 +140,16 @@ jobs:
     steps:
       - name: Fail if any image job failed
         run: |
-          echo "get_dirs result: ${{ needs.get_dirs.matrix }}"
+          echo "get_dirs result: ${{ needs.get_dirs.outputs.matrix }}"
           echo "build-and-push result: ${{ needs.build-and-push.result }}"
-          if [ "${{ needs.build-and-push.result }}" != "success" ] && [ "${{ needs.build-and-push.result }}" != "skipped" ]; then
+          # Succeed when there are no images to build (matrix == [])
+          if [ "${{ needs.get_dirs.outputs.matrix }}" = "[]" ] || [ -z "${{ needs.get_dirs.outputs.matrix }}" ]; then
+            echo "No changed images detected; skipping failure checks."
+            exit 0
+          fi
+
+          # Otherwise require the matrix build job to be successful.
+          # (When the matrix is empty, build-and-push is typically 'skipped', handled above.)
+          if [ "${{ needs.build-and-push.result }}" != "success" ]; then
             exit 1
           fi
