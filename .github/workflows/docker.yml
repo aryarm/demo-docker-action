@@ -140,6 +140,7 @@ jobs:
     steps:
       - name: Fail if any image job failed
         run: |
+          echo "get_dirs result: ${{ needs.get_dirs.matrix }}"
           echo "build-and-push result: ${{ needs.build-and-push.result }}"
           if [ "${{ needs.build-and-push.result }}" != "success" ] && [ "${{ needs.build-and-push.result }}" != "skipped" ]; then
             exit 1
