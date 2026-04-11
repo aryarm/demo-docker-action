@@ -5,12 +5,8 @@ on:
     branches: [ "main" ]
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
-    paths-ignore:
-      - 'README.md'
   pull_request:
     branches: [ "main" ]
-    paths-ignore:
-      - 'README.md'
 
 jobs:
   # adapted from https://docs.github.com/en/actions/learn-github-actions/expressions#example-returning-a-json-object
@@ -45,6 +41,7 @@ jobs:
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
   build-and-push:
+    name: Build ${{ matrix.envname }}
     needs: get_dirs
     runs-on: ubuntu-latest
     permissions:
@@ -134,3 +131,16 @@ jobs:
           subject-name: ${{ matrix.registry }}/${{ github.repository_owner }}/${{ matrix.envname }}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
+
+  all-green:
+    name: All green
+    needs: [get_dirs, build-and-push]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail if any image job failed
+        run: |
+          echo "build-and-push result: ${{ needs.build-and-push.result }}"
+          if [ "${{ needs.build-and-push.result }}" != "success" ] && [ "${{ needs.build-and-push.result }}" != "skipped" ]; then
+            exit 1
+          fi
